@@ -7,18 +7,23 @@ body{ background-color:#222}
 </head>
 <body>
 <canvas id="canvas" height="500" width="320"></canvas>
+
 <script>
 var alternativa = ["A","B", "C","D", "E"];
 canv = document.getElementById("canvas");
 ctx = canv.getContext("2d");
+
 //tamanho do gabarito
 size =60;
 //numero de questoes
-nquestion = 11;
+nquestion = 10;
 
 canvas.width = ((size+size/10) * 7) + size/10;
 canvas.height = ((size+size/10) * (nquestion+2)) + size/10;
+ctx.fillStyle = "#fff";
+ctx.fillRect(0,0,canv.width,canv.height);
 //marcador 1 (superior esquerdo)
+ctx.fillStyle = "#000";
 ctx.fillRect(size/10,size/10,size,size);
 //marcador 1 (superior direito)
 ctx.fillRect( (size+size/10) * 6 + size/10,size/10,size,size);

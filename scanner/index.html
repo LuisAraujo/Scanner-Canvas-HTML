@@ -1,0 +1,69 @@
+<html>
+<head>
+<style>
+body{ background-color:#222}
+#canvas{ background-color:#fff}
+#camera-stream{display:none}
+</style>
+</head>
+<body>
+
+ <video id="camera-stream" autoplay muted></video>
+
+<canvas id="canvas"></canvas>
+<script>
+// Check that the browser supports getUserMedia.
+// If it doesn't show an alert, otherwise continue.
+if (navigator.getUserMedia) {
+  // Request the camera.
+  navigator.getUserMedia(
+    // Constraints
+    {
+      video: true
+    },
+
+    // Success Callback
+    function(localMediaStream) {
+		// Get a reference to the video element on the page.
+		var vid = document.getElementById('camera-stream');
+
+		// Create an object URL for the video stream and use this 
+		// to set the video source.
+		vid.src = window.URL.createObjectURL(localMediaStream);
+    },
+
+    // Error Callback
+    function(err) {
+      // Log the error to the console.
+      console.log('The following error occurred when trying to use getUserMedia: ' + err);
+    }
+  );
+
+} else {
+  alert('Sorry, your browser does not support getUserMedia');
+}
+
+
+var canvas = document.getElementById('canvas');
+var ctx = canvas.getContext('2d');
+var video = document.getElementById('camera-stream');
+
+// set canvas size = video size when known
+video.addEventListener('loadedmetadata', function() {
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+});
+
+video.addEventListener('play', function() {
+  var $this = this; //cache
+  (function loop() {
+    if (!$this.paused && !$this.ended) {
+      ctx.drawImage($this, 0, 0);
+      setTimeout(loop, 1000 / 30); // drawing at 30fps
+    }
+  })();
+}, 0);
+
+</script>
+</body>
+</html>
