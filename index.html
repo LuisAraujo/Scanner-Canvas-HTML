@@ -1,0 +1,130 @@
+<html>
+<head>
+<style>
+body{ background-color:#222}
+#canvas{ background-color:#fff}
+</style>
+</head>
+<body>
+<canvas id="canvas" height="500" width="200"></canvas>
+<script>
+nota = 0;
+alter = [];
+alter[0] = "a";
+alter[1] = "b";
+alter[2] = "c";
+alter[3] = "d";
+alter[4] = "e";
+
+gabarito = [];
+gabarito[0] = 3;
+gabarito[1] = 1;
+gabarito[2] = 3;
+gabarito[3] = 4;
+gabarito[4] = 2;
+gabarito[5] = 4;
+gabarito[6] = 3;
+gabarito[7] = 4;
+gabarito[8] = 2;
+gabarito[9] = 4;
+
+size = 0;
+canv = document.getElementById("canvas");
+ctx = canv.getContext("2d");
+imgGabarito = new Image();
+imgGabarito.crossOrigin = 'anonymous';
+
+imgGabarito.onload = function(){
+  ctx.drawImage(imgGabarito,0,0);
+  size = getSizeImage();
+  
+  getQuestions(size);
+};
+imgGabarito.src = "gab.png";
+
+getSizeImage = function(){
+   size = 0;
+   for(y=0; y <canvas.height; y++){
+	for(x=0; x <canvas.width; x++){
+		var canvasColor = ctx.getImageData(x, y, 1, 1).data; // rgba e [0,255]
+		var r = canvasColor[0];
+		var g = canvasColor[1];
+		var b = canvasColor[2];
+		
+		if( (r > 10) && (g > 10) && (b > 10))
+		  
+		  if(x != 0 ){
+		    y++;
+		    x=-1;
+		  }else{
+			size = y;
+			y = canvas.height;
+			break;
+		  } 
+	}
+   }
+  
+  return size;
+}
+
+
+getQuestions= function(size){
+
+    nquestion = 1;
+	hasnextquestion = true;
+	do{
+		for(i=1; i<= 5; i++){
+			var canvasColor = ctx.getImageData( (size+size)*i, (size+size) * nquestion , 1, 1).data; // rgba e [0,255]
+			var r = canvasColor[0];
+			var g = canvasColor[1];
+			var b = canvasColor[2];
+			//console.log((r + g + b))
+			if( (r + g + b) < 100){
+			   console.log("Q"+nquestion+" - Alternativa "+alter[i-1]+" marcada"+ i);	
+			   
+			   if( i == gabarito[nquestion-1]){      
+			       nota++;
+				   ctx.fillStyle = "rgba(0,255,0,0.1)";
+				   ctx.strokeStyle = "rgba(0,200,0,1)";
+				}else{
+				   ctx.fillStyle = "rgba(255,0,0,0.1)"; 
+				   ctx.strokeStyle = "rgba(200,0,0,1)";
+				}
+			    ctx.beginPath(); 
+			    ctx.arc( (size-1)*2 + ( (gabarito[nquestion-1]-1) * (size-2)*2 ) + 3*(gabarito[nquestion-1]-1) , (size + size)*nquestion + 1 * nquestion-1 ,size-2, 0,2*Math.PI);
+			    ctx.closePath();
+			    ctx.fill();
+			    ctx.stroke();
+			     
+				break;
+			}
+		}
+		
+		
+		var canvasColor = ctx.getImageData( 0, size + (size+size) * (nquestion) + (nquestion*1) , 1, 1)
+		var canvasColorData = canvasColor.data; // rgba e [0,255]
+		var r = canvasColorData[0];
+		var g = canvasColorData[1];
+		var b = canvasColorData[2];
+		
+		canvasColorData[0] = 0;
+		canvasColorData[1] = 255;
+		canvasColorData[2] = 0;
+		console.log(r,g,b)
+			
+		ctx.putImageData(canvasColor, 0, size + (size+size) * (nquestion) + (nquestion*1) )
+		 
+		if( (r + g + b) < 100){
+		  hasnextquestion = false;
+	    }else
+		  nquestion++;
+	    
+    }while(hasnextquestion)
+
+	
+	alert("sua nota é: "+nota);
+}
+
+</script>
+</body>
+</html>
