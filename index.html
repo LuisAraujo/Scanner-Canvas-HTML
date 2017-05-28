@@ -29,59 +29,176 @@ gabarito[8] = 2;
 gabarito[9] = 4;
 
 size = 0;
+margin = 0;
+sizeWithMargin = 0;
+contAlternative = 0;
+contQuestion = 0;
+//marcador superior
+markedsup = 0;
+//marcador esquerdo  
+markedlef = 0;
 canv = document.getElementById("canvas");
 ctx = canv.getContext("2d");
 imgGabarito = new Image();
 imgGabarito.crossOrigin = 'anonymous';
 
 imgGabarito.onload = function(){
+  canv.width = imgGabarito.width;
+  canv.height = imgGabarito.height;
+  
   ctx.drawImage(imgGabarito,0,0);
   size = getSizeImage();
-  
+  margin = size/10;
+  sizeWithMargin = size + margin;
+  setMarked();
+  countAlternative();
+  countQuestion();
   getQuestions(size);
 };
-imgGabarito.src = "gab.png";
+imgGabarito.src = "gab2.png";
 
 getSizeImage = function(){
    size = 0;
-   for(y=0; y <canvas.height; y++){
-	for(x=0; x <canvas.width; x++){
-		var canvasColor = ctx.getImageData(x, y, 1, 1).data; // rgba e [0,255]
-		var r = canvasColor[0];
-		var g = canvasColor[1];
-		var b = canvasColor[2];
-		
-		if( (r > 10) && (g > 10) && (b > 10))
-		  
-		  if(x != 0 ){
-		    y++;
-		    x=-1;
-		  }else{
-			size = y;
-			y = canvas.height;
-			break;
-		  } 
-	}
+   inmark = false;
+   x = 0;
+   while(size <= 0){
+	   for(y=0; y <canvas.height; y++){
+		//for(x=0; x <canvas.width; x++){
+			var canvasColor = ctx.getImageData(x, y, 1, 1).data; // rgba e [0,255]
+			var r = canvasColor[0];
+			var g = canvasColor[1];
+			var b = canvasColor[2];
+			
+			if( r+g+b < 100){
+				if(!inmark){
+				  inmark = true;
+				  markedsup = y;
+				  markedlef = x;
+				}
+				size++;
+			}else if(inmark){
+				break;
+			}
+		}
+	x++;
    }
-  
+ 
   return size;
+}
+
+
+setMarked = function(){
+
+ ctx.strokeStyle = "rgba(0,200,0,1)";
+ ctx.lineWidth = 2;
+ ctx.strokeRect(markedlef, markedsup,size,size);
+  y = markedsup;
+  markedlef2 = 0;
+  
+  for(x=markedlef+size; x < canvas.height; x++){
+			
+			var canvasColor = ctx.getImageData(x+1, y, 1, 1); // rgba e [0,255]
+			var canvasColorData = canvasColor.data;
+			var r = canvasColorData[0];
+			var g = canvasColorData[1];
+			var b = canvasColorData[2];
+						
+			canvasColorData[0] = 200;
+			canvasColorData[1] = 255;
+			canvasColorData[2] = 0;
+			ctx.putImageData(canvasColor,x+1,y)
+			
+			if( r+g+b < 100){
+				markedlef2 = x+1;
+				break;
+			}
+	}
+	
+    ctx.strokeRect(markedlef2, markedsup,size,size);
+	
+	x = markedlef;
+	for(y=markedsup+size; y < canvas.height; y++){
+			
+			var canvasColor = ctx.getImageData(x+1, y, 1, 1); // rgba e [0,255]
+			var canvasColorData = canvasColor.data;
+			var r = canvasColorData[0];
+			var g = canvasColorData[1];
+			var b = canvasColorData[2];
+			
+			canvasColorData[0] = 200;
+			canvasColorData[1] = 255;
+			canvasColorData[2] = 0;
+			ctx.putImageData(canvasColor,x+1,y)
+			
+			if( r+g+b < 100){
+				markedsup2 = y;
+				break;
+			}
+	}
+	
+	ctx.strokeRect(markedlef, markedsup2,size,size);
+	
+}
+
+countAlternative = function(){
+   // get size bwt two mark and divide by size (with margin) and subtract 1 (for alternative column)
+   numAlternative  = ((markedlef2 - (markedlef+sizeWithMargin))/(sizeWithMargin) ) - 1;
+}
+
+countQuestion = function(){
+   // get size bwt two mark and divide by size (with margin) and subtract 1 (for alternative column)
+   numQuestion = ((markedsup2 - (markedsup+size))/(sizeWithMargin) ) -1;
 }
 
 
 getQuestions= function(size){
 
     nquestion = 1;
-	hasnextquestion = true;
-	do{
+	for(nquestion = 1; nquestion<= numQuestion; nquestion++){
+	  
 		for(i=1; i<= 5; i++){
-			var canvasColor = ctx.getImageData( (size+size)*i, (size+size) * nquestion , 1, 1).data; // rgba e [0,255]
-			var r = canvasColor[0];
-			var g = canvasColor[1];
-			var b = canvasColor[2];
-			//console.log((r + g + b))
-			if( (r + g + b) < 100){
+		   var r = 0;
+		   var g = 0;
+		   var b = 0;
+		   for(j=-2; j<2; j++){
+				for(l=-2; l<2; l++){
+				    
+					canvasColor = ctx.getImageData(
+					(markedlef + size+ sizeWithMargin + (sizeWithMargin)*i - size/2) + j, 
+					( (markedsup + size + (sizeWithMargin + size/2) )  + sizeWithMargin*(nquestion-1)) + l,
+					1,1);
+			        canvasColorData = canvasColor.data; 
+					r += canvasColorData[0];
+					g += canvasColorData[1];
+					b += canvasColorData[2];
+					/*canvasColorData[0] = 255;
+					canvasColorData[1] = 0;
+					canvasColorData[2] = 0;
+					ctx.putImageData(canvasColor, (markedlef + size+ sizeWithMargin + (sizeWithMargin)*i - size/2) + j, ( (markedsup + size + (sizeWithMargin + size/2) )  + sizeWithMargin*(nquestion-1)) + l);
+			        */
+
+					
+				}	
+			}
+			/*
+			var canvasColor = ctx.getImageData(0,0 , 1, 1);	
+			var canvasColorData = canvasColor.data; // rgba e [0,255]
+			var r = canvasColorData[0];
+			var g = canvasColorData[1];
+			var b = canvasColorData[2];
+			
+			canvasColorData[0] = 255;
+			canvasColorData[1] = 0;
+			canvasColorData[2] = 0;
+			for(j=-2; j<2; j++)
+				for(l=-2; l<2; l++)
+					ctx.putImageData(canvasColor, (sizeWithMargin*2 + (sizeWithMargin)*i - size/2) + j, ( (sizeWithMargin + (sizeWithMargin + size/2) )  + sizeWithMargin*(nquestion-1)) + l);
+			*/
+			
+			console.log( (r/16 +  g/16 +  b/16) / 3)
+			if( ((r/16 +  g/16 +  b/16) / 3) <= 30){
 			   console.log("Q"+nquestion+" - Alternativa "+alter[i-1]+" marcada"+ i);	
-			   
+			   ctx.lineWidth = size/10;
 			   if( i == gabarito[nquestion-1]){      
 			       nota++;
 				   ctx.fillStyle = "rgba(0,255,0,0.1)";
@@ -91,38 +208,21 @@ getQuestions= function(size){
 				   ctx.strokeStyle = "rgba(200,0,0,1)";
 				}
 			    ctx.beginPath(); 
-			    ctx.arc( (size-1)*2 + ( (gabarito[nquestion-1]-1) * (size-2)*2 ) + 3*(gabarito[nquestion-1]-1) , (size + size)*nquestion + 1 * nquestion-1 ,size-2, 0,2*Math.PI);
-			    ctx.closePath();
+			    //ctx.arc( (size/10 + size/2) + sizeWithMargin + sizeWithMargin*i, size/2 + sizeWithMargin + ( sizeWithMargin * nquestion ),size/2, 0,2*Math.PI);
+			    ctx.arc( (markedlef + size/2) + sizeWithMargin + sizeWithMargin*i , markedsup + size + size/2 + ( sizeWithMargin * nquestion ),size/2, 0,2*Math.PI);
+				ctx.closePath();
 			    ctx.fill();
 			    ctx.stroke();
-			     
-				break;
+			    //nquestion++;
+				//break;
 			}
-		}
-		
-		
-		var canvasColor = ctx.getImageData( 0, size + (size+size) * (nquestion) + (nquestion*1) , 1, 1)
-		var canvasColorData = canvasColor.data; // rgba e [0,255]
-		var r = canvasColorData[0];
-		var g = canvasColorData[1];
-		var b = canvasColorData[2];
-		
-		canvasColorData[0] = 0;
-		canvasColorData[1] = 255;
-		canvasColorData[2] = 0;
-		console.log(r,g,b)
 			
-		ctx.putImageData(canvasColor, 0, size + (size+size) * (nquestion) + (nquestion*1) )
-		 
-		if( (r + g + b) < 100){
-		  hasnextquestion = false;
-	    }else
-		  nquestion++;
-	    
-    }while(hasnextquestion)
+			//nquestion++;
+		}	
+	}
 
 	
-	alert("sua nota é: "+nota);
+	//alert("sua nota é: "+nota);
 }
 
 </script>

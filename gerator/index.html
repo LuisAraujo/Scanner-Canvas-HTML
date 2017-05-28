@@ -6,7 +6,7 @@ body{ background-color:#222}
 </style>
 </head>
 <body>
-<canvas id="canvas" height="500" width="320"></canvas>
+<canvas id="canvas" height="500" width="420"></canvas>
 
 <script>
 var alternativa = ["A","B", "C","D", "E"];
@@ -14,19 +14,19 @@ canv = document.getElementById("canvas");
 ctx = canv.getContext("2d");
 
 //tamanho do gabarito
-size =60;
+size =40;
 //numero de questoes
 nquestion = 10;
 
-canvas.width = ((size+size/10) * 7) + size/10;
-canvas.height = ((size+size/10) * (nquestion+2)) + size/10;
+canvas.width = ((size+size/10) * 8) + size/10;
+canvas.height = ((size+size/10) * (nquestion+2)) +  (size + size/10);
 ctx.fillStyle = "#fff";
 ctx.fillRect(0,0,canv.width,canv.height);
 //marcador 1 (superior esquerdo)
 ctx.fillStyle = "#000";
 ctx.fillRect(size/10,size/10,size,size);
 //marcador 1 (superior direito)
-ctx.fillRect( (size+size/10) * 6 + size/10,size/10,size,size);
+ctx.fillRect( (size+size/10) * 7 + size/10,size/10,size,size);
 //style
 
 ctx.font = size+"px Arial";
@@ -37,24 +37,24 @@ for(j=1; j <= nquestion; j++){
 	for(i=1; i <= 5; i++){	
 	    //se for a 1, imprima as alternativas (A,B,C,D,E)
 		if(j == 1)
-			ctx.fillText(alternativa[i-1], (size+size/10) *i + size/4, size-size/10);	
+			ctx.fillText(alternativa[i-1], (size + size/10) + ( (size+size/10) *i + size/4), (size + size/10) + size);	
 		//se questao maior que 10, ajuste a posicao do numero
 		if(j<10)
-			ctx.fillText(j, size/4, size + (size+size/10)*j);
+			ctx.fillText(j, (size + size/10) + size/4, (size + size/10) + (size + (size+size/10)*j));
 		else
-			ctx.fillText(j, size/40, size + (size+size/10)*j);
+			ctx.fillText(j, (size + size/10) , (size + size/10) + (size + (size+size/10)*j));
 		ctx.strokeStyle="#aaa";
 		//impima lacunas
-		ctx.strokeRect( (size+size/10)*i + size/10, (size + size/10) * j,size,size);
+		ctx.strokeRect( (size + size/10) +  ((size+size/10)*i + size/10),  (size + size/10) + (size + size/10) * j,size,size);
 		ctx.strokeStyle="#000";
 		//imprima circulos
 		ctx.beginPath();
-		ctx.arc( size/2 + size/10 +(size+size/10)*i /* (size/2)+size+ (size/10*2)*/, size/2 + (size+size/10) *j,size/2 ,0,2*Math.PI);
+		ctx.arc( (size + size/10) + (size/2 + size/10 +(size+size/10)*i),  (size + size/10) +(size/2 + (size+size/10) *j),size/2 ,0,2*Math.PI);
 		ctx.stroke();
 	}
 }
 
-ctx.fillRect( size/10 , (size + size/10) * (nquestion+1),size,size);
+ctx.fillRect( size/10 , (size + size/10) + (size + size/10) * (nquestion+1),size,size);
 
 </script>
 </body>
