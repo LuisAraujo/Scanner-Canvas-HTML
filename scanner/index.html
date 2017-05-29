@@ -35,6 +35,12 @@ $("#bt-switch").click(function(){
 
 function startApplication(){
 
+	if (window.stream) {
+	window.stream.getTracks().forEach(function(track) {
+	  track.stop();
+	});
+	}
+  
 	var constraints = {
 		audio: {deviceId: undefined},
 		video: {deviceId: cameralist[currentcam] ? {exact: cameralist[currentcam]} : undefined}
@@ -44,7 +50,7 @@ function startApplication(){
 	 
 }
 
-//navigator.mediaDevices.enumerateDevices().then(gotDevices).catch(function(){});
+navigator.mediaDevices.enumerateDevices().then(gotDevices).catch(function(){});
 
 function gotDevices(deviceInfos) {
    cameralist = [];
