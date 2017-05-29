@@ -12,23 +12,6 @@ html, body{ background-color:#222; width:100%; height:100%}
 <video id="camera-stream" autoplay muted></video>
 <canvas id="canvas"></canvas>
 <script>
-navigator.mediaDevices.enumerateDevices().then(gotDevices).catch(function(){});
-
-function gotDevices(deviceInfos) {
-  
-  
-   for (var i = 0; i !== deviceInfos.length; ++i) {
-     var deviceInfo = deviceInfos[i];
-	 console.log(deviceInfo.kind);
-	 if (deviceInfo.kind === 'videoinput') {
-      console.log(deviceInfo.label );
-	  cam = deviceInfo.label;
-	  alert(cam)
-    }
-  }
- 
-}
-
 var video = document.querySelector("#camera-stream");
 navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia || navigator.oGetUserMedia;
 if (navigator.getUserMedia) {       
@@ -63,8 +46,6 @@ video.addEventListener('play', function() {
     }
   })();
 }, 0);
-
-
 
 </script>
 </body>
