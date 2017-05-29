@@ -28,8 +28,8 @@ $("#bt-switch").click(function(){
 		else
 		  currentcam = 0;
 	
-	startApplication();
-		alert(cameralist[currentcam]);
+	    startApplication();
+		alert("ok "+cameralist[currentcam]);
 	}else{
 	   alert("Have only one camera");
 	}
@@ -57,6 +57,7 @@ function startApplication(){
 	}
 
 }
+
 navigator.mediaDevices.enumerateDevices().then(gotDevices).catch(function(){});
 
 function gotDevices(deviceInfos) {
