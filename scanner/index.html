@@ -16,12 +16,9 @@ html, body{ background-color:#222; width:100%; height:100%}
 <script>
 var cameralist = [];
 var currentcam = 0;
+var videoElement = document.querySelector('video');
 
-startApplication()
-
-
-$("#bt-switch").click(function(){
-   
+$("#bt-switch").click(function(){  
 	if(cameralist.length > 1){
 		if(currentcam == 0)
 		  currentcam = 1;
@@ -29,54 +26,48 @@ $("#bt-switch").click(function(){
 		  currentcam = 0;
 	
 	    startApplication();
-		//alert("ok "+cameralist[currentcam]);
+		alert("ok "+cameralist[currentcam]);
 	}else{
 	   startApplication();
-	   alert("Have only one camera");
+	   //alert("Have only one camera"+cameralist.length);
 	}
 });
 
 function startApplication(){
-var videoElement = document.querySelector('video');
+
 	var constraints = {
-		video: {deviceId: cameralist[currentcam]}
+		audio: {deviceId: undefined},
+		video: {deviceId: cameralist[currentcam] ? {exact: cameralist[currentcam]} : undefined}
 	};
   
-	var video = document.querySelector("#camera-stream");
-	//navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia || navigator.oGetUserMedia;
-    navigator.mediaDevices.getUserMedia(constraints).then(gotStream).then(gotDevices).catch(handleError);
-	  
-	/*if (navigator.getUserMedia) {       
-		navigator.getUserMedia({video: true}, handleVideo, videoError);
-	}*/
+	navigator.mediaDevices.getUserMedia(constraints).then(gotStream).then(gotDevices).catch(handleError);
 	 
-	function gotStream(stream) {
-		window.stream = stream; // make stream available to console
-		videoElement.srcObject = stream;
-		// Refresh button list in case labels have become available
-		return navigator.mediaDevices.enumerateDevices();
-	}
-	
-	function handleError(error) {
-		console.log('navigator.getUserMedia error: ', error);
-	}
 }
 
-navigator.mediaDevices.enumerateDevices().then(gotDevices).catch(function(){});
+//navigator.mediaDevices.enumerateDevices().then(gotDevices).catch(function(){});
 
 function gotDevices(deviceInfos) {
+   cameralist = [];
    for (var i = 0; i !== deviceInfos.length; ++i) {
      var deviceInfo = deviceInfos[i];
-	 console.log(deviceInfo.kind);
+	 //console.log(deviceInfo.kind);
 	 if (deviceInfo.kind === 'videoinput') {
       cameralist.push(deviceInfo.deviceId);
-	  //cam = deviceInfo.label;
-	  //alert(cam)
     }
   }
 }
 
 
+function gotStream(stream){
+	window.stream = stream; // make stream available to console
+	videoElement.srcObject = stream;
+	// Refresh button list in case labels have become available
+	return navigator.mediaDevices.enumerateDevices();
+}
+	
+function handleError(error) {
+	console.log('navigator.getUserMedia error: ', error);
+}
 
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
@@ -99,7 +90,7 @@ video.addEventListener('play', function() {
 }, 0);
 
 
-
+startApplication();
 </script>
 </body>
 </html>
