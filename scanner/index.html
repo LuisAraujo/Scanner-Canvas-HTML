@@ -16,6 +16,10 @@ html, body{ background-color:#222; width:100%; height:100%}
 <script>
 var cameralist = [];
 var currentcam = 0;
+
+startApplication()
+
+
 $("#bt-switch").click(function(){
    
 	if(cameralist.length > 1){
@@ -23,13 +27,36 @@ $("#bt-switch").click(function(){
 		  currentcam = 1;
 		else
 		  currentcam = 0;
-		
+	
+	startApplication();
 		alert(cameralist[currentcam]);
 	}else{
 	   alert("Have only one camera");
 	}
 });
 
+function startApplication(){
+
+	var constraints = {
+		video: {deviceId: cameralist[currentcam]}
+	};
+  
+	var video = document.querySelector("#camera-stream");
+	navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia || navigator.oGetUserMedia;
+
+	if (navigator.getUserMedia) {       
+		navigator.getUserMedia({video: constraints}, handleVideo, videoError);
+	}
+	 
+	function handleVideo(stream) {
+		video.src = window.URL.createObjectURL(stream);
+	}
+	 
+	function videoError(e) {
+		// do something
+	}
+
+}
 navigator.mediaDevices.enumerateDevices().then(gotDevices).catch(function(){});
 
 function gotDevices(deviceInfos) {
@@ -37,27 +64,13 @@ function gotDevices(deviceInfos) {
      var deviceInfo = deviceInfos[i];
 	 console.log(deviceInfo.kind);
 	 if (deviceInfo.kind === 'videoinput') {
-      cameralist.push(deviceInfo.label);
-	  cam = deviceInfo.label;
-	  alert(cam)
+      cameralist.push(deviceInfo.deviceId);
+	  //cam = deviceInfo.label;
+	  //alert(cam)
     }
   }
 }
 
-var video = document.querySelector("#camera-stream");
-navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia || navigator.oGetUserMedia;
-
-if (navigator.getUserMedia) {       
-    navigator.getUserMedia({video: true}, handleVideo, videoError);
-}
- 
-function handleVideo(stream) {
-    video.src = window.URL.createObjectURL(stream);
-}
- 
-function videoError(e) {
-    // do something
-}
 
 
 var canvas = document.getElementById('canvas');
