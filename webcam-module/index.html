@@ -36,7 +36,7 @@ $("#bt-switch").click(function(){
 function startApplication(){
 
 	if (window.stream) {
-	window.stream.getTracks().forEach(function(track) {
+	  window.stream.getTracks().forEach(function(track) {
 	  track.stop();
 	});
 	}
