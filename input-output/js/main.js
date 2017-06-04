@@ -10,7 +10,7 @@
 
 var videoElement = document.querySelector('video');
 var arrayCameras = [];
-var currentCamera= 0;
+var currentCamera= 1;
 var btSwitchCamera = document.getElementById('bt-switch');
 var flagResizeCam = false;
 
@@ -72,7 +72,7 @@ function videoError(e) {
 
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
-var video = document.getElementById('camera-stream');
+//var video = document.getElementById('camera-stream');
 
 // set canvas size = video size when known
 videoElement.addEventListener('loadedmetadata', function() {
