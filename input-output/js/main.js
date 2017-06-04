@@ -71,19 +71,36 @@ function handleError(error) {
   console.log('navigator.getUserMedia error: ', error);
 }
 
-/*
-function resizeCamera(){
-	
-console.log("resize...");
-
-if(videoElement.videoHeight == 0)
-	setTimeout(resizeCamera, 100);
-else{
-//  videoElement.setAttribute("height", screen.height*0.9);
-
+navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia || navigator.oGetUserMedia;
+if (navigator.getUserMedia) {       
+    navigator.getUserMedia({video: true}, handleVideo, videoError);
+}
+ 
+function handleVideo(stream) {
+    video.src = window.URL.createObjectURL(stream);
+}
+ 
+function videoError(e) {
+    // do something
 }
 
-//console.log(videoElement.videoHeight , screen.height)
-}
 
-*/
+var canvas = document.getElementById('canvas');
+var ctx = canvas.getContext('2d');
+var video = document.getElementById('camera-stream');
+
+// set canvas size = video size when known
+videoElement.addEventListener('loadedmetadata', function() {
+  canvas.width = videoElement.videoWidth;
+  canvas.height = videoElement.videoHeight;
+});
+
+videoElement.addEventListener('play', function() {
+  var $this = this; //cache
+  (function loop() {
+    if (!$this.paused && !$this.ended) {
+      ctx.drawImage($this, 0, 0);
+      setTimeout(loop, 1000 / 30); // drawing at 30fps
+    }
+  })();
+}, 0);
