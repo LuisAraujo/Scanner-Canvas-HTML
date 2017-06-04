@@ -11,6 +11,7 @@
 var videoElement = document.querySelector('video');
 var arrayCameras = [];
 var currentCamera= 0;
+var btSwitchCamera = document.getElementById('bt-switch');
 //var audioInputSelect = document.querySelector('select#audioSource');
 //var audioOutputSelect = document.querySelector('select#audioOutput');
 //var videoSelect = document.querySelector('select#videoSource');
@@ -115,8 +116,20 @@ function start() {
 //audioOutputSelect.onchange = changeAudioDestination;
 //videoSelect.onchange = start;
 
+
+btSwitchCamera.addEventListener("click",function(){
+      currentCamera++;
+      if(currentCamera >= arrayCameras.length)
+      	currentCamera =0;
+		
+		start();
+});
+
+
 start();
 
 function handleError(error) {
   console.log('navigator.getUserMedia error: ', error);
 }
+
+
