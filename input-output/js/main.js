@@ -33,7 +33,7 @@ function gotStream(stream) {
   videoElement.srcObject = stream;
   // Refresh button list in case labels have become available
   
-   setTimeout(resizeCamera, 100);
+   //setTimeout(resizeCamera, 100);
   return navigator.mediaDevices.enumerateDevices();
 }
 
@@ -71,7 +71,7 @@ function handleError(error) {
   console.log('navigator.getUserMedia error: ', error);
 }
 
-
+/*
 function resizeCamera(){
 	
 console.log("resize...");
@@ -83,4 +83,4 @@ else{
 }
 
 console.log(videoElement.videoHeight , screen.height)
-}
+}*/
