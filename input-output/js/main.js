@@ -53,7 +53,8 @@ function start() {
   navigator.mediaDevices.getUserMedia(constraints).
       then(gotStream).then(gotDevices).catch(handleError);
      
-     
+ 
+ /*    
      
 navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia || navigator.oGetUserMedia;
 
@@ -90,7 +91,7 @@ videoElement.addEventListener('play', function() {
   })();
 }, 0);
 
-   
+   */
 }
 
 
