@@ -52,26 +52,11 @@ function start() {
   };
   navigator.mediaDevices.getUserMedia(constraints).
       then(gotStream).then(gotDevices).catch(handleError);
-        
-}
-
-
-btSwitchCamera.addEventListener("click",function(){
-      currentCamera++;
-      if(currentCamera >= arrayCameras.length)
-      	currentCamera =0;
-		
-		start();
-});
-
-
-start();
-
-function handleError(error) {
-  console.log('navigator.getUserMedia error: ', error);
-}
-
+     
+     
+     
 navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia || navigator.oGetUserMedia;
+
 if (navigator.getUserMedia) {       
     navigator.getUserMedia({video: true}, handleVideo, videoError);
 }
@@ -104,3 +89,24 @@ videoElement.addEventListener('play', function() {
     }
   })();
 }, 0);
+
+   
+}
+
+
+btSwitchCamera.addEventListener("click",function(){
+      currentCamera++;
+      if(currentCamera >= arrayCameras.length)
+      	currentCamera =0;
+		
+		start();
+});
+
+
+start();
+
+function handleError(error) {
+  console.log('navigator.getUserMedia error: ', error);
+}
+
+
