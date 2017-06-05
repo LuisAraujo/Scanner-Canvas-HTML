@@ -80,6 +80,8 @@ function updateCanvas(){
     ctx.clearRect(0,0,canvas.width,canvas.height); 
     canvas.height = videoElement.videoHeight;
     canvas.width = videoElement.videoWidth;
+    
+    console.log(canvas.height)
     ctx.drawImage(videoElement, 0, 0);
   
     
