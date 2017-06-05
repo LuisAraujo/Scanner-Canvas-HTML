@@ -57,6 +57,8 @@ function start() {
       
       
   requestAnimationFrame(updateCanvas);
+  
+   console.log("Start")
      
 }
 
