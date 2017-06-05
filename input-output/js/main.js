@@ -82,12 +82,42 @@ function updateCanvas(){
     ctx.clearRect(0,0,canvas.width,canvas.height); 
     canvas.height = videoElement.videoHeight;
     canvas.width = videoElement.videoWidth;
-    
-    console.log(canvas.height)
+   
     ctx.drawImage(videoElement, 0, 0);
-  
+    
+    drawMarkRects();
     
     // all done for display 
     // request the next frame in 1/60th of a second
     requestAnimationFrame(updateCanvas);
+}
+
+
+function drawMarkRects(){
+	
+   drawRects(10,10,100,100,10);
+   console.log(canvas.height)
+   drawRects(screen.width - 110, 10 ,100,100,10);
+   drawRects(10, canvas.height-10 ,100,100,10);
+   drawRects(screen.width - 110, canvas.height-10 ,100,100,10);
+}
+
+function drawRects(x,y,w,h,radius){
+   ctx.strokeStyle="#111";
+   ctx.fillStyle = "rgba(100,100,100, 0.2)";
+   var r = x + w;
+   var b = y + h;
+   ctx.beginPath();
+	ctx.moveTo(x+radius, y);
+	ctx.lineTo(r-radius, y);
+	ctx.quadraticCurveTo(r, y, r, y+radius);
+	ctx.lineTo(r, y+h-radius);
+	ctx.quadraticCurveTo(r, b, r-radius, b);
+	ctx.lineTo(x+radius, b);
+	ctx.quadraticCurveTo(x, b, x, b-radius);
+	ctx.lineTo(x, y+radius);
+	ctx.quadraticCurveTo(x, y, x+radius, y);    
+   ctx.stroke();
+
+   ctx.fill();  	
 }
