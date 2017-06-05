@@ -96,9 +96,9 @@ function updateCanvas(){
 function drawMarkRects(){
 	
    drawRects(10,10,100,100,10);
-   console.log(canvas.height)
+   console.log(canvas.width	, screen.width	)
    drawRects(screen.width - 110, 10 ,100,100,10);
-   drawRects(10, 300 ,100,100,10);
+   drawRects(10, 100 ,100,100,10);
    drawRects(screen.width - 110, screen.height-10 ,100,100,10);
 }
 
