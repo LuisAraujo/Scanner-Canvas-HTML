@@ -13,6 +13,8 @@ var arrayCameras = [];
 var currentCamera= 1;
 var btSwitchCamera = document.getElementById('bt-switch');
 var flagResizeCam = false;
+var canvas = document.getElementById('canvas');
+var ctx = canvas.getContext("2d");
 
 function gotDevices(deviceInfos) { 
   	
@@ -52,46 +54,10 @@ function start() {
   };
   navigator.mediaDevices.getUserMedia(constraints).
       then(gotStream).then(gotDevices).catch(handleError);
+      
+      
+  requestAnimationFrame(updateCanvas);
      
- 
- /*    
-     
-navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia || navigator.oGetUserMedia;
-
-if (navigator.getUserMedia) {       
-    navigator.getUserMedia({video: true}, handleVideo, videoError);
-}
- 
-function handleVideo(stream) {
-    video.src = window.URL.createObjectURL(stream);
-}
- 
-function videoError(e) {
-    // do something
-}
-
-
-var canvas = document.getElementById('canvas');
-var ctx = canvas.getContext('2d');
-//var video = document.getElementById('camera-stream');
-
-// set canvas size = video size when known
-videoElement.addEventListener('loadedmetadata', function() {
-  canvas.width = videoElement.videoWidth;
-  canvas.height = videoElement.videoHeight;
-});
-
-videoElement.addEventListener('play', function() {
-  var $this = this; //cache
-  (function loop() {
-    if (!$this.paused && !$this.ended) {
-      ctx.drawImage($this, 0, 0);
-      setTimeout(loop, 1000 / 30); // drawing at 30fps
-    }
-  })();
-}, 0);
-
-   */
 }
 
 
@@ -110,4 +76,14 @@ function handleError(error) {
   console.log('navigator.getUserMedia error: ', error);
 }
 
-
+function updateCanvas(){
+    ctx.clearRect(0,0,canvas.width,canvas.height); 
+    canvas.height = videoElement.videoHeight;
+    canvas.width = videoElement.videoWidth;
+    ctx.drawImage(videoElement, 0, 0);
+  
+    
+    // all done for display 
+    // request the next frame in 1/60th of a second
+    requestAnimationFrame(updateCanvas);
+}
