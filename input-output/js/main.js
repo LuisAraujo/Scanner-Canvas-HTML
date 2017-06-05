@@ -10,7 +10,7 @@
 
 var videoElement = document.querySelector('video');
 var arrayCameras = [];
-var currentCamera= 1;
+var currentCamera= 0;
 var btSwitchCamera = document.getElementById('bt-switch');
 var flagResizeCam = false;
 var canvas = document.getElementById('canvas');
