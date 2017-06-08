@@ -47,6 +47,8 @@ imgGabarito.onload = function(){
   canv.height = imgGabarito.height;
   
   ctx.drawImage(imgGabarito,0,0);
+  
+  setEffect();
   size = getSizeImage();
   margin = size/10;
   sizeWithMargin = size + margin;
@@ -55,7 +57,7 @@ imgGabarito.onload = function(){
   countQuestion();
   getQuestions(size);
 };
-imgGabarito.src = "gab2.png";
+imgGabarito.src = "cam/gab (1).jpg";
 
 getSizeImage = function(){
    size = 0;
@@ -69,6 +71,7 @@ getSizeImage = function(){
 			var g = canvasColor[1];
 			var b = canvasColor[2];
 			
+
 			if( r+g+b < 100){
 				if(!inmark){
 				  inmark = true;
@@ -87,14 +90,46 @@ getSizeImage = function(){
 }
 
 
+setEffect = function(){
+
+  
+  for(x = 0; x < canvas.width; x++){
+    for(y = 0; y < canvas.height; y++){
+			
+			var canvasColor = ctx.getImageData(x, y, 1, 1); // rgba e [0,255]
+			var canvasColorData = canvasColor.data;
+			//luminosidade
+			 canvasColorData[0]+=25;
+			 canvasColorData[1]+=25;
+			 canvasColorData[2]+=25;
+			
+		
+			var r = canvasColorData[0];
+			var g = canvasColorData[1];
+			var b = canvasColorData[2];
+			
+			//p&b
+			var limiar = (0.2126*r + 0.7152*g + 0.0722*b >= 100) ? 255 : 0;
+			canvasColorData[0]= limiar;
+			canvasColorData[1]= limiar;
+			canvasColorData[2]= limiar;
+			
+			ctx.putImageData(canvasColor,x,y)
+			
+	}
+  }
+	
+}
+
 setMarked = function(){
 
  ctx.strokeStyle = "rgba(0,200,0,1)";
  ctx.lineWidth = 2;
+ //mark 1
  ctx.strokeRect(markedlef, markedsup,size,size);
   y = markedsup;
   markedlef2 = 0;
-  
+  //mark 2
   for(x=markedlef+size; x < canvas.height; x++){
 			
 			var canvasColor = ctx.getImageData(x+1, y, 1, 1); // rgba e [0,255]
@@ -108,18 +143,18 @@ setMarked = function(){
 			canvasColorData[2] = 0;
 			ctx.putImageData(canvasColor,x+1,y)
 			
-			if( r+g+b < 100){
+			if( r+g+b <  100){
 				markedlef2 = x+1;
 				break;
 			}
 	}
 	
     ctx.strokeRect(markedlef2, markedsup,size,size);
-	
+	//mark 3
 	x = markedlef;
 	for(y=markedsup+size; y < canvas.height; y++){
 			
-			var canvasColor = ctx.getImageData(x+1, y, 1, 1); // rgba e [0,255]
+			var canvasColor = ctx.getImageData(x+6, y, 1, 1); // rgba e [0,255]
 			var canvasColorData = canvasColor.data;
 			var r = canvasColorData[0];
 			var g = canvasColorData[1];
