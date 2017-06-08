@@ -84,7 +84,8 @@ function updateCanvas(){
     canvas.width = screen.width;
 
    
-    ctx.drawImage(videoElement, 0, 0, 0, 0, screen.width, screen.height);
+    ctx.drawImage(videoElement, 0, 0,videoElement.videoWidth, videoElement.videoHeight,
+	0, 0, screen.width, screen.height);
     
     drawMarkRects();
     
