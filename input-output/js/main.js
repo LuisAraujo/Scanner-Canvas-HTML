@@ -80,11 +80,11 @@ function handleError(error) {
 
 function updateCanvas(){
     ctx.clearRect(0,0,canvas.width,canvas.height); 
-    canvas.height = screen.height;
+    canvas.height = screen.height*.9;
     canvas.width = screen.width;
 
-   
-    ctx.drawImage(videoElement, 0, 0,videoElement.videoWidth, videoElement.videoHeight); 
+    
+    ctx.drawImage(videoElement, 0, 0, videoElement.videoWidth, videoElement.videoHeight); 
 	//,0, 0, screen.width, screen.height);
     
     drawMarkRects();
