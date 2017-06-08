@@ -82,6 +82,7 @@ function updateCanvas(){
     ctx.clearRect(0,0,canvas.width,canvas.height); 
     canvas.height = screen.height;
     canvas.width = screen.width;
+
    
     ctx.drawImage(videoElement, 0, 0, 0, 0, screen.width, screen.height);
     
